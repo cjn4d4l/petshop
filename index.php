@@ -8,13 +8,14 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 
- $error = '';
+$error = '';
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Trim whitespace from inputs to prevent accidental space errors
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
+    $role = $_POST['role'] ?? 'user';
 
     // Validate input (no empty fields)
     if (empty($username) || empty($password)) {
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user = $stmt->fetch();
 
             // Verify user exists and password is correct
-            if ($user && password_verify($password, $user['password_hash'])) {
+            if ($user && password_verify($password, $user['password_hash']) && $role == $user['role']) {
                 // Check if account is active
                 if ($user['is_active'] == 1) {
                     // Session management: create session upon successful login
@@ -37,7 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['username'] = $user['username'];
                     
                     // Redirect to dashboard after login
-                    header("Location: dashboard.php");
+                    if ($user['role'] == "admin") {
+                        header("Location: dashboard.php");
+                    } else if ($user['role'] == "user") {
+                        header("Location: ./shop/index.php");
+                    }
                     exit();
                 } else {
                     $error = "Your account is inactive. Please contact the administrator.";
@@ -78,6 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <select name="role" id="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>

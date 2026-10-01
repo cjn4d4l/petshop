@@ -28,6 +28,7 @@ try {
     $stmt_recent = $pdo->query("SELECT * FROM users ORDER BY created_at DESC LIMIT 5");
     $recent_users = $stmt_recent->fetchAll();
 
+    // Number of Products
     $stmt_products = $pdo->query("SELECT COUNT(*) as n FROM products");
     $n_products = $stmt_products->fetch()['n'];
 
@@ -153,7 +154,7 @@ $username = htmlspecialchars($_SESSION['username']);
                                     <td><?php echo $product['category']; ?></td>
                                     <td>₱<?php echo $product['price']; ?></td>
                                     <td><?php echo $product['stock_quantity']; ?></td>
-                                    <td><?php echo date('M d, Y g:i A', strtotime($user['created_at'])); ?></td>
+                                    <td><?php echo date('M d, Y g:i A', strtotime($product['created_at'])); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>

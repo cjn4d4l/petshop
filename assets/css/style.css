@@ -45,6 +45,14 @@ body {
     font-size: 16px;
 }
 
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
 /* Buttons */
 .btn {
     display: inline-block;
@@ -55,6 +63,18 @@ body {
     cursor: pointer;
     text-decoration: none;
     color: #fff;
+}
+
+.home-header {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #3498db; 
+    width: 100%;
 }
 
 .btn-primary { background-color: #3498db; width: 100%; }
@@ -80,7 +100,7 @@ body {
     padding: 20px;
 }
 
-.dashboard-header {
+.dashboard-header, .product-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
