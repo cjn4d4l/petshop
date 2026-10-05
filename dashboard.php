@@ -3,7 +3,7 @@
 session_start();
 
 // Protect page: redirect to login if not authenticated
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != "admin") {
     header("Location: index.php");
     exit();
 }

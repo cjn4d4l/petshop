@@ -15,8 +15,8 @@ $username = $_SESSION['username'] ?? '';
 $stmt_products = $pdo->query("SELECT * FROM products");
 $products = $stmt_products->fetchAll();
 
-$add_to_cart_message = '';
-$add_to_orders_message = '';
+$add_to_cart_message = $_SESSION['add_to_cart_message'] ?? '';
+$add_to_orders_message = $_SESSION['add_to_orders_message'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +35,8 @@ $add_to_orders_message = '';
             <h2>PetStore | E-Commerce</h2>
             <nav class="user-info">
                 Welcome, <strong><?php echo $username; ?></strong>!
-                <a href="" class="btn btn-secondary btn-sm">View Cart</a>
+                <a href="viewCart.php" class="btn btn-secondary btn-sm">View Cart</a>
+                <a href="viewOrders.php" class="btn btn-secondary btn-sm">View Orders</a>
                 <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
             </nav>
         </header>
@@ -56,8 +57,7 @@ $add_to_orders_message = '';
                 <?php foreach ($products as $product): ?>
                     <div class="product-container">
                         <div>
-                            <h3>Product Details</h3>
-                            <p>Name: <strong><?php echo $product['name'] ?></strong></p>
+                            <h3><?php echo $product['name'] ?></h3>
                             <p>Category: <strong><?php echo $product['category'] ?></strong></p>
                             <p>Stock: <strong><?php echo $product['stock_quantity'] ?> Available</strong></p>
                             <p>price: <strong>₱<?php echo $product['price'] ?></strong></p>
@@ -65,7 +65,7 @@ $add_to_orders_message = '';
                         <div style="text-align: center;">
                             <center><h3>Action</h3></center>
                             <a style="margin-top: 10px;" href="addcart.php?id=<?php echo $product['id'] ?>" class="btn btn-secondary btn-sm">Add to Cart</a> <br>    
-                            <a style="margin-top: 10px;" href="" class="btn btn-secondary btn-sm">Purchase Now</a>
+                            <a style="margin-top: 10px;" href="addOrder.php?id=<?php echo $product['id'] ?>" class="btn btn-primary btn-sm">Purchase Now</a>
                         </div>
                     </div>
                 <?php endforeach ?>
@@ -75,3 +75,8 @@ $add_to_orders_message = '';
 </body>
 
 </html>
+
+<?php 
+unset($_SESSION['add_to_cart_message']);
+unset($_SESSION['add_to_orders_message']);
+?>

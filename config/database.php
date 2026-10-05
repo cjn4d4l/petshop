@@ -1,7 +1,7 @@
 <?php
 // config/database.php
 
-$db_host     = '127.0.0.1:3307';
+$db_host     = '127.0.0.1:3308';
 $db_name     = 'petstore_db';
 $db_username = 'root';          // ← renamed
 $db_password = '';              // ← renamed

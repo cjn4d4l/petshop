@@ -3,8 +3,8 @@
 session_start();
 
 // If user is already logged in, redirect to dashboard
-if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+if (isset($_SESSION['user_id']) && $_SESSION['role'] == "user") {
+    header("Location: ./shop/index.php");
     exit();
 }
 
@@ -31,22 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Verify user exists and password is correct
             if ($user && password_verify($password, $user['password_hash']) && $role == $user['role']) {
-                // Check if account is active
-                if ($user['is_active'] == 1) {
-                    // Session management: create session upon successful login
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['username'] = $user['username'];
-                    
-                    // Redirect to dashboard after login
-                    if ($user['role'] == "admin") {
-                        header("Location: dashboard.php");
-                    } else if ($user['role'] == "user") {
-                        header("Location: ./shop/index.php");
-                    }
-                    exit();
-                } else {
-                    $error = "Your account is inactive. Please contact the administrator.";
+                $update = $pdo->prepare("UPDATE users SET is_active = :is_active WHERE id = :id");
+                $update->execute([
+                    "is_active" => true,
+                    "id" => $user['id']
+                ]);
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role'] = $user['role'];
+
+                if ($user['role'] == "user") {
+                    header("Location: ./shop/index.php");
+                } else if ($user['role'] == "admin") {
+                    header("Location: dashboard.php");
                 }
+                exit();
             } else {
                 // Show error for invalid credentials
                 $error = "Invalid username or password.";
